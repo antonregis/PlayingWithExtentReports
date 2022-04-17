@@ -1,13 +1,16 @@
 ﻿using Freeflow.Helpers;
 using OpenQA.Selenium.Chrome;
 using TechTalk.SpecFlow;
-
+using static Freeflow.Helpers.CommonMethods;
+using AventStack.ExtentReports;
 
 namespace Freeflow.Utils
 {
     [Binding]
     public class Start : CommonDriver
     {
+        private static ExtentReports extent;
+
         [BeforeScenario]
         public void Setup()
         {
@@ -20,7 +23,13 @@ namespace Freeflow.Utils
         [AfterScenario]
         public void TearDown()
         {
-            //Close the browser
+            // Taking a screenshot
+            string img = SaveScreenShotClass.SaveScreenshot(driver, "Report");
+            var extent = new ExtentReports();
+            var test = extent.CreateTest("ReportScreenshot");
+            test.Log(Status.Info, "Snapshot below: " + test.AddScreenCaptureFromPath(img));
+
+            // Close the browser
             driver.Quit();
         }
     }

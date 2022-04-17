@@ -1,0 +1,97 @@
+using AventStack.ExtentReports;
+using AventStack.ExtentReports.Gherkin.Model;
+using AventStack.ExtentReports.Reporter;
+using Freeflow.Helpers;
+using OpenQA.Selenium.Chrome;
+using System.Reflection;
+using TechTalk.SpecFlow;
+
+
+namespace Freeflow.Utils
+{
+    [Binding]
+    public class Start : CommonDriver
+    {
+        private static ExtentTest featureName;
+        private static ExtentTest scenario;
+        private static ExtentReports extent;
+
+
+        [BeforeTestRun]
+        public static void InitializeReport()
+        {
+            var htmlReporter = new ExtentHtmlReporter(@"R:\PlayingWithExtentReports\Freeflow\TestReports\extentreport\");
+            var extent = new ExtentReports();
+            extent.AttachReporter(htmlReporter);
+        }
+
+        [BeforeFeature]
+        public static void BeforeFeature(FeatureContext featurecontext)
+        {
+            // ExtentReport: Create test or the Feature
+            if (null != featurecontext) 
+            {
+                featureName = extent.CreateTest<Feature>(featurecontext.FeatureInfo.Title);
+            }                
+        }
+
+        [AfterStep]
+        public void InsertReportingSteps(ScenarioContext sc)
+        {
+            var stepType = ScenarioStepContext.Current.StepInfo.StepDefinitionType.ToString();
+            PropertyInfo pInfo = typeof(ScenarioContext).GetProperty("ScenarioExecutionStatus", BindingFlags.Instance | BindingFlags.Public);
+            MethodInfo getter = pInfo.GetGetMethod(nonPublic: true);
+            object TestResult = getter.Invoke(sc, null);
+            if (sc.TestError == null)
+            {
+                if (stepType == "Given")
+                    scenario.CreateNode<Given>(ScenarioStepContext.Current.StepInfo.Text);
+                else if (stepType == "When")
+                    scenario.CreateNode<When>(ScenarioStepContext.Current.StepInfo.Text);
+                else if (stepType == "Then")
+                    scenario.CreateNode<Then>(ScenarioStepContext.Current.StepInfo.Text);
+                else if (stepType == "And")
+                    scenario.CreateNode<And>(ScenarioStepContext.Current.StepInfo.Text);
+            }
+            if (sc.TestError != null)
+            {
+                if (stepType == "Given")
+                    scenario.CreateNode<Given>(ScenarioStepContext.Current.StepInfo.Text).Fail(sc.TestError.Message);
+                if (stepType == "When")
+                    scenario.CreateNode<When>(ScenarioStepContext.Current.StepInfo.Text).Fail(sc.TestError.Message);
+                if (stepType == "Then")
+                    scenario.CreateNode<Then>(ScenarioStepContext.Current.StepInfo.Text).Fail(sc.TestError.Message);
+                if (stepType == "And")
+                    scenario.CreateNode<And>(ScenarioStepContext.Current.StepInfo.Text).Fail(sc.TestError.Message);
+            }
+        }
+
+        [BeforeScenario]
+        public void Setup(ScenarioContext scenarioContext)
+        {
+            // Open chrome browser
+            driver = new ChromeDriver();
+            driver.Manage().Window.Maximize();
+            driver.Navigate().GoToUrl("https://tademo.codifyme.co.nz/freeflow");
+
+            // ExtentReport: Create node or the Scenario
+            if (null != scenarioContext) 
+            { 
+                scenario = featureName.CreateNode<Scenario>(scenarioContext.ScenarioInfo.Title);
+            }                
+        }
+
+        [AfterScenario]
+        public void TearDown()
+        {
+            //Close the browser
+            driver.Quit();
+        }
+
+        [AfterTestRun]
+        public static void TearDownReport()
+        {
+            extent.Flush();
+        }
+    }
+}
