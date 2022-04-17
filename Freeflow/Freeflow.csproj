@@ -30,6 +30,7 @@
     <Folder Include="SpecflowTests\Data\" />
     <Folder Include="StepDefinitions\" />
     <Folder Include="TestReports\html\" />
+    <Folder Include="TestReports\extentreport\" />
     <Folder Include="TestReports\screenshots\" />
   </ItemGroup>
 
