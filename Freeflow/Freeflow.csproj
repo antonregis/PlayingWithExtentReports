@@ -7,6 +7,14 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="TestReports\html\**" />
+    <EmbeddedResource Remove="TestReports\html\**" />
+    <None Remove="TestReports\html\**" />
+    <SpecFlowFeatureFiles Remove="TestReports\html\**" />
+    <SpecFlowObsoleteCodeBehindFiles Remove="TestReports\html\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="DotNetSeleniumExtras.WaitHelpers" Version="3.11.0" />
     <PackageReference Include="ExcelDataReader" Version="3.6.0" />
     <PackageReference Include="ExcelDataReader.DataSet" Version="3.6.0" />
@@ -29,7 +37,6 @@
     <Folder Include="SpecflowPages\Pages\" />
     <Folder Include="SpecflowTests\Data\" />
     <Folder Include="StepDefinitions\" />
-    <Folder Include="TestReports\html\" />
     <Folder Include="TestReports\extentreport\" />
     <Folder Include="TestReports\screenshots\" />
   </ItemGroup>
