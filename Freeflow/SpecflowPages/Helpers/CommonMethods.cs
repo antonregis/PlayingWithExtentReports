@@ -1,6 +1,4 @@
-﻿using AventStack.ExtentReports;
-using OpenQA.Selenium;
-using System;
+﻿using OpenQA.Selenium;
 using System.Text;
 
 
@@ -8,11 +6,9 @@ namespace Freeflow.Helpers
 {
     public class CommonMethods
     {
-        //Screenshots
-
+        // For capturing screenshots
         public class SaveScreenShotClass
         {
-
             public static string SaveScreenshot(IWebDriver driver, string ScreenShotFileName)
             {
                 var folderLocation = (@"R:\PlayingWithExtentReports\Freeflow\TestReports\screenshots\");
@@ -26,7 +22,7 @@ namespace Freeflow.Helpers
                 var fileName = new StringBuilder(folderLocation);
 
                 fileName.Append(ScreenShotFileName);
-                fileName.Append(DateTime.Now.ToString("_yyyy-MM-dd_hhmmsstt"));
+                fileName.Append(DateTime.Now.ToString("_yyyy-MM-dd_HHmmss"));
                 fileName.Append(".jpeg");
                 screenShot.SaveAsFile(fileName.ToString(), ScreenshotImageFormat.Jpeg);
                 return fileName.ToString();
@@ -34,5 +30,3 @@ namespace Freeflow.Helpers
         }
 	}
 }
-
-
