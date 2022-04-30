@@ -7,6 +7,10 @@ Learning goal is to generate:
 Test website: 
 - https://tademo.codifyme.co.nz/freeflow
 
+Versions:
+- Specflow
+- NUnit
+
 References:
 - https://www.extentreports.com/docs/versions/4/net/index.html
 - https://youtu.be/C1RiUYkSKGw
